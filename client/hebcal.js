@@ -1045,7 +1045,13 @@ prototype.daysInMonth = function() {
 	return daysInMonth(this[getMonth](), this[getFullYear]());
 };
 
-prototype[getDate] = function() {
+// prototype[getDate] = function() {
+// 	return this.day;
+// };
+prototype[getDate] = function(lang) {
+	if(lang && lang == 'h'){
+		return gematriya(this.day);
+	}
 	return this.day;
 };
 
