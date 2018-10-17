@@ -1060,9 +1060,9 @@ prototype[getDate] = function(lang) {
 
 prototype.getDay = function(lang) {
 	if(lang && lang == 'h'){
-		return gematriya(this.greg().getDay());
+		return gematriya(this.greg().getDay()+1);
 	}
-	return this.greg().getDay();
+	return this.greg().getDay()+1;
 };
 
 prototype.setFullYear = function(year) {
