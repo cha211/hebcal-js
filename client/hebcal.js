@@ -1024,7 +1024,10 @@ function fixMonth(date) {
 	}
 }
 
-prototype[getFullYear] = function() {
+prototype[getFullYear] = function(lang) {
+	if(lang && lang == 'h'){
+		return gematriya(this.year);
+	}
 	return this.year;
 };
 
@@ -1055,7 +1058,10 @@ prototype[getDate] = function(lang) {
 	return this.day;
 };
 
-prototype.getDay = function() {
+prototype.getDay = function(lang) {
+	if(lang && lang == 'h'){
+		return gematriya(this.greg().getDay());
+	}
 	return this.greg().getDay();
 };
 
