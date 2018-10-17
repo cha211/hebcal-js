@@ -1,0 +1,32 @@
+{
+  "name": "hebcal",
+  "description": "An easy to use, richly-featured, perpetual Jewish Calendar API",
+  "main": "./client/hebcal.noloc.js",
+  "authors": [
+    "Michael J. Radwin (https://github.com/mjradwin)",
+    "Danny Sadinoff (https://github.com/dsadinoff)"
+  ],
+  "license": "GPL-3.0+",
+  "keywords": [
+    "hebcal",
+    "hebrew",
+    "calendar",
+    "jewish",
+    "holidays",
+    "chagim",
+    "sedra",
+    "date",
+    "dafyomi",
+    "zemanim",
+    "zmanim"
+  ],
+  "homepage": "https://github.com/cha211/hebcal-js",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}
