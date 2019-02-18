@@ -127,7 +127,7 @@ Event.prototype.getDesc = function(o) {
 };
 
 Event.prototype.candleLighting = function() {
-	var date = this.date.next();
+	var date = this.date;
 	if (this.LIGHT_CANDLES) {
 		return new Date(date.sunset() - (Event.candleLighting * 60 * 1000));
 	} else if (this.LIGHT_CANDLES_TZEIS) {
@@ -481,10 +481,10 @@ exports.year = function(year) {
 
 	/*if (year >= 5727) { // Yom Yerushalayim only celebrated after 1967
    add(new Event(
-   new HDate(29, months.IYYAR, year),
-   ['Yom Yerushalayim', 0, 'יום ירושלים'],
-   0
-   ));
+			new HDate(28, months.IYYAR, year),
+			['Yom Yerushalayim', 0, 'יום ירושלים'],
+			0
+		));
    }*/
 
 	tmpDate = new HDate(17, months.TAMUZ, year);
@@ -526,7 +526,7 @@ exports.year = function(year) {
 		0
 	));
 
-	for (var day = 6; day < c.daysInYear(year); day += 7) {
+	for (var day = 6; day < c.daysInYear(year) + 7; day += 7) {
 		add(new Event(
 			new HDate(dayOnOrBefore(SAT, new HDate(1, TISHREI, year)[abs]() + day)),
 			[Shabbat, Shabbos, 'שבת'],

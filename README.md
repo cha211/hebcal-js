@@ -17,10 +17,10 @@ $ npm install hebcal
 
 ...and include Hebcal with `var Hebcal = require('hebcal');`
 
-Hebcal JS is currently at version 2.2.3. It is approximately equivalent to Hebcal C 3.15.
+Hebcal JS is currently at version 2.3.1. It is approximately equivalent to Hebcal C 3.15.
 I (Eyal) did not write Hebcal JS 1.0. 2.x is a nearly-complete rewrite of it.
 
-The version documented here is 2.2.3.
+The version documented here is 2.3.1.
 
 ## Releases
 
@@ -32,6 +32,12 @@ The version documented here is 2.2.3.
 * 2.2.1 - 2016-04-17 (9 Nisan 5776)
 * 2.2.2 - 2016-04-18 (10 Nisan 5776)
 * 2.2.3 - 2017-02-14 (18 Shvat 5777)
+* 2.2.4 - 2017-05-17 (21 Iyyar 5777)
+* 2.2.5 - 2017-07-02 (8 Tamuz 5777)
+* 2.2.6 - 2017-10-29 (10 Cheshvan 5778)
+* 2.3.0 - 2019-02-11 (6 Adar 1 5779)
+* 2.3.1 - 2019-02-11 (6 Adar 1 5779)
+
 
 ## Contributors
 
@@ -58,6 +64,19 @@ The original Hebcal is at [hebcal/hebcal](https://github.com/hebcal/hebcal).
 
 This is where every property and method is listed.
 
+- [CLI](https://github.com/hebcal/hebcal-js#command-line-interface)
+- [`Hebcal`](https://github.com/hebcal/hebcal-js#hebcal)
+- [`Hebcal.HDate`](https://github.com/hebcal/hebcal-js#new-hebcalhdateday-month-year)
+- [`Hebcal.Month`](https://github.com/hebcal/hebcal-js#new-hebcalmonthmonth-year)
+- [`Hebcal.GregYear`](https://github.com/hebcal/hebcal-js#new-hebcalgregyearyear-month)
+- [`Hebcal.GregMonth`](https://github.com/hebcal/hebcal-js#new-hebcalgregmonthmonth-year)
+- [`Hebcal.cities`](https://github.com/hebcal/hebcal-js#hebcalcities)
+- [`Hebcal.holidays`](https://github.com/hebcal/hebcal-js#hebcalholidays)
+- [`Hebcal.events`](https://github.com/hebcal/hebcal-js#hebcalevents)
+- Utilities:
+- - [`gematriya`](https://github.com/hebcal/hebcal-js#hebcalgematriyastring--num-limit)
+- - [`range`](https://github.com/hebcal/hebcal-js#hebcalrangestart-end-step)
+
 ## Information on certain standards
 
 ### Descriptions
@@ -71,7 +90,7 @@ Methods that fetch a value from this array expect one of the following strings: 
 Hebcal is not too particular about month names, and only checks up to the second letter. That means that, despite being totally incorrect, "cheese" will return the same value as "cheshvan". Month names work in both Hebrew and English.
 
 Nisan, Iyyar, Sivan, Tamuz, Av, Elul, Tishrei, Cheshvan, Kislev, Tevet, Shvat, Adar (1, 2).
-ניסן, אייר, סיון, תמוז, אב, אלול, תשרי, חשון, כסלב, טבת, שבט, אדר (1, 2).
+ניסן, אייר, סיון, תמוז, אב, אלול, תשרי, חשון, כסלו, טבת, שבט, אדר (1, 2).
 
 ### Sun times
 
@@ -786,6 +805,23 @@ new Hebcal.HDate(8,8,5774).getSedra('h') // [ 'לך-לך' ]
 
 An alias of `getSedra()`. Added v2.1.
 
+### `Hebcal.HDate.prototype.isSedra()`
+
+Return a Boolean of whether the parsha is a regular parsha (true) or special chag reading (false). Added in v2.3.0.
+
+```js
+new Hebcal.HDate(24,12,5773).isSedra() // true
+new Hebcal.HDate(18,1,5774).isSedra() // false
+new Hebcal.HDate(12,6,5774).isSedra() // true
+new Hebcal.HDate(15,7,5774).isSedra() // false
+new Hebcal.HDate(19,12,5773).isSedra() // true
+new Hebcal.HDate(8,8,5774).isSedra() // true
+```
+
+### `Hebcal.HDate.prototype.isParsha()`
+
+An alias of `isSedra()`. Added v2.3.
+
 ### `Hebcal.HDate.prototype.setCity(city)`
 
 Set the location to the coordinates of a given city. For more about cities, see `Hebcal.cities`. Returns the object it was called upon.
@@ -960,7 +996,7 @@ new Hebcal.HDate(15, 'elul', 5772).dafyomi('a') // Berachos 30
 
 ### `Hebcal.HDate.prototype.tachanun()`
 
-Return a bitmask containing information on what Tachanun (or Tzidchatcha on Shabbat) is said on that day.
+Return a bitmask containing information on what Tachanun (or Tzidchatcha on Shabbat) is said on that day. For an explanation of how this works, see [issue #38](https://github.com/hebcal/hebcal-js/issues/38#issuecomment-300735615).
 
 Tachanun is not said on Rosh Chodesh, the month of Nisan, Lag Baomer, Rosh Chodesh Sivan until Isru Chag, Tisha B'av, 15 Av, Erev Rosh Hashanah, Rosh Hashanah, Erev Yom Kippur until after Simchat Torah, Chanukah, Tu B'shvat, Purim and Shushan Purim, and Purim and Shushan Purim Katan.
 
@@ -983,6 +1019,20 @@ These bitmasks are also available as properties of the function:
 * `tachanun.ALL_CONGS = 4`
 
 However, due to the lengthliness of typing `Hebcal.HDate.prototype.tachanun.*BITMASK*`, it may be easier to just use the values directly.
+
+### `Hebcal.HDate.prototype.tachanun_uf()`
+
+*New as of v2.2.4*
+
+Return a user-friendly representation of tachanun(). An object with Boolean properties {shacharit, mincha, all_congs}.
+
+```js
+new Hebcal.HDate('1 Tishrei').tachanun_uf() // { shacharit: false, mincha: false, all_congs: false }
+new Hebcal.HDate('25 Tishrei').tachanun_uf() // { shacharit: true, mincha: true, all_congs: false }
+new Hebcal.HDate('6 Cheshvan').tachanun_uf() // { shacharit: true, mincha: true, all_congs: true }
+new Hebcal.HDate().onOrAfter(5).tachanun_uf() // Friday: { shacharit: true, mincha: false, all_congs: true }
+new Hebcal.HDate().onOrAfter(6).tachanun_uf() // Shabbat: { shacharit: false, mincha: true, all_congs: true }
+```
 
 ### `Hebcal.HDate.prototype.hallel()`
 

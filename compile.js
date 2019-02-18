@@ -3,7 +3,6 @@ var browserify = require('browserify'),
     fs         = require('fs'),
     exorcist   = require('exorcist'),
     uglifyjs   = require('uglify-js'),
-    marked     = require('marked'),
     version    = require('./package.json').version;
 var github = 'https://github.com/hebcal/hebcal-js/tree/v'+version+'/';
 
@@ -12,7 +11,6 @@ var minHeader = "/*\n    Hebcal - A Jewish Calendar Generator\n\n    https://git
 // the commands
 normal();
 noloc();
-readme();
 
 // all the functions get hoisted
 
@@ -33,7 +31,7 @@ function minify(inFile, outFile, inSourceMap, outSourceMap) {
         inSourceMap: inSourceMap,
         outSourceMap: outSourceMap,
         sourceRoot: github,
-        mangle: false,
+        mangle: true,
         warnings: true
     });
     fs.writeFileSync(outFile, minHeader + removeLocalPath(result.code));
@@ -44,7 +42,7 @@ function minify(inFile, outFile, inSourceMap, outSourceMap) {
 }
 
 function normal() {
-    var sourceFile = 'client/client.js';
+    var sourceFile = 'src/client.js';
     var fullOutput = 'client/hebcal.js';
     var fullMap = 'client/hebcal.js.map';
     var minOutput = 'client/hebcal.min.js';
@@ -54,29 +52,12 @@ function normal() {
     });
 }
 function noloc() {
-    var sourceFile = 'client/hebcal.noloc.src.js';
+    var sourceFile = 'src/noloc.js';
     var fullOutput = 'client/hebcal.noloc.js';
     var fullMap = 'client/hebcal.noloc.js.map';
     var minOutput = 'client/hebcal.noloc.min.js';
     var minMap = 'client/hebcal.noloc.min.js.map';
     compile(sourceFile, fullOutput, fullMap, function () {
         minify(fullOutput, minOutput, fullMap, minMap);
-    });
-}
-
-function readme() {
-    fs.readFile('README.md', function(err, md){
-        if (err) {
-            console.error('Could not open README.md');
-            return;
-        }
-        var output = marked(md.toString(), {gfm: true, breaks: true});
-        fs.writeFile('README.html', output, function(err){
-            if (err) {
-                console.error('Could not write README.html');
-            } else {
-                console.log('Created README.html');
-            }
-        });
     });
 }

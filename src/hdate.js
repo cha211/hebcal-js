@@ -318,8 +318,8 @@ prototype.setLocation = function(lat, lon) {
 		lat = lat.lat;
 	}
 	if (Array.isArray(lat) && typeof lon == 'undefined') {
-		lon = lat[0];
-		lat = lat[1];
+		lon = lat[1];
+		lat = lat[0];
 	}
 	if (Array.isArray(lat)) {
 		lat = (lat[0] * 60 + lat[1]) / 60;
@@ -343,7 +343,10 @@ prototype.setLocation = function(lat, lon) {
 };
 
 function suntime(hdate) {
-	return suncalc.getTimes(hdate.greg(), hdate.lat, hdate.long);
+	// reset the date to midday before calling suncalc api
+	// https://github.com/mourner/suncalc/issues/11
+	var date = hdate.greg();
+	return suncalc.getTimes(new Date(date.getFullYear(), date.getMonth(), date.getDate(), 12, 0, 0, 0, 0), hdate.lat, hdate.long);
 }
 
 prototype.sunrise = function() {
@@ -450,7 +453,7 @@ prototype.isSameDate = function(other) {
 };
 
 function onOrBefore(day, t, offset) {
-	return new HDate(dayOnOrBefore(day, t[abs]() + offset));
+	return new HDate(dayOnOrBefore(day, t[abs]() + offset)).setLocation(t.lat, t.long);
 }
 
 prototype.before = function(day) {

@@ -87,7 +87,7 @@ var parshiot = Sedra.parshiot = [
 	[ 'Noach', 0, 'נח' ],
 	[ 'Lech-Lecha', 0, 'לך-לך' ],
 	[ 'Vayera', 0, 'וירא' ],
-	[ 'Chayei Sara', 0, 'חי שרה' ],
+	[ 'Chayei Sara', 0, 'חיי שרה' ],
 	[ 'Toldot', 'Toldos', 'תולדות' ],
 	[ 'Vayetzei', 0, 'ויצא' ],
 	[ 'Vayishlach', 0, 'וישלח' ],
@@ -296,7 +296,11 @@ types['1721'] = types['170'];
 
 
 Sedra.prototype.get = function(hDate) {
-	return abs(this, hDate.abs());
+	return abs(this, hDate.abs()).parsha;
+};
+
+Sedra.prototype.isParsha = function(hDate) {
+	return !abs(this, hDate.abs()).chag;
 };
 
 // returns an array describing the parsha on the first Saturday on or after absdate
@@ -313,14 +317,14 @@ function abs(year, absDate) {
 	}
 	if (typeof index == 'object') {
 		// Shabbat has a chag. Return a description
-		return [index];
+		return {parsha: [index], chag: true};
 	}
 	if (index >= 0) {
-		return [parshiot[index]];
+		return {parsha: [parshiot[index]], chag: false};
 	}
 
 	index = D(index); // undouble the parsha
-	return [parshiot[index], parshiot[index + 1]];
+	return {parsha: [parshiot[index], parshiot[index + 1]], chag: false};
 }
 
 module.exports = Sedra;
